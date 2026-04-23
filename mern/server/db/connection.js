@@ -7,7 +7,7 @@ const client = new MongoClient(URI, {
     strict: true,
     deprecationErrors: true,
   },
-  appName: "sample-app-nodejs-mern-tutorial",
+  appName: "devrel-github-javascript-mern",
 });
 
 try {
