@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+# Cypress
+cypress.json
+
 
 # Editor directories and files
 .vscode/*
