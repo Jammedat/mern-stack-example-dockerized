@@ -76,6 +76,25 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173).
 
+## Quick Start with GitHub Codespaces or Dev Containers
+
+New to the repo? **Use Codespaces for the fastest setup**:
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mongodb-developer/mern-stack-example?quickstart=1)
+
+Or use VS Code Dev Containers locally (requires [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)):
+
+1. Clone the repo
+2. Run: `Ctrl+Shift+P` → "Dev Containers: Reopen in Container"
+3. Wait for setup to complete (MongoDB + dependencies install automatically)
+4. Run both services:
+   ```bash
+   # Terminal 1: npm start (from mern/server)
+   # Terminal 2: npm run dev (from mern/client)
+   ```
+
+MongoDB (Atlas Local) and all dependencies are automatically configured. See [`.devcontainer/README.md`](.devcontainer/README.md) for details.
+
 ## MongoDB Features Demonstrated
 
 | Feature | Where |

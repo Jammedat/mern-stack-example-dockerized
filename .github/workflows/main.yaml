@@ -25,6 +25,9 @@ jobs:
           --health-retries 5
         ports:
           - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: mongodb
 
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +51,7 @@ jobs:
 
       - name: Start server in the background
         env:
-          ATLAS_URI: ${{ secrets.ATLAS_URI || 'mongodb://localhost:27017/' }}
+          ATLAS_URI: mongodb://admin:mongodb@localhost:27017/
         run: |
           echo "ATLAS_URI=$ATLAS_URI" > config.env
           npm start > /tmp/server.log 2>&1 &

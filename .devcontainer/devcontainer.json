@@ -1,0 +1,49 @@
+{
+  "name": "MERN Stack with MongoDB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mongodb.mongodb-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "mongodb.connectionSslEnabled": false,
+        "mongodb.defaultAuthenticationDatabase": "admin"
+      }
+    }
+  },
+
+  "forwardPorts": [5050, 5173, 27017],
+  "portsAttributes": {
+    "5050": {
+      "label": "Express API",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "React Dev Server",
+      "onAutoForward": "notify"
+    },
+    "27017": {
+      "label": "MongoDB",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "cd mern/server && npm ci && cd ../client && npm ci",
+  "postStartCommand": "cd mern/server && node seed.js",
+
+  "remoteEnv": {
+    "ATLAS_URI": "mongodb://admin:mongodb@mongodb:27017/employees"
+  }
+}
