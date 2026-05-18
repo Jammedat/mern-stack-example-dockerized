@@ -15,6 +15,16 @@ jobs:
       matrix:
         node-version: [20.x, 22.x]
       max-parallel: 1
+    services:
+      mongodb:
+        image: mongo:latest
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
 
     steps:
       - uses: actions/checkout@v4
@@ -38,11 +48,16 @@ jobs:
 
       - name: Start server in the background
         env:
-          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+          ATLAS_URI: ${{ secrets.ATLAS_URI || 'mongodb://localhost:27017/' }}
         run: |
           echo "ATLAS_URI=$ATLAS_URI" > config.env
-          npm start &
+          npm start > /tmp/server.log 2>&1 &
+          echo "Server PID: $!"
         working-directory: mern/server
+
+      - name: Wait for server to be ready
+        run: |
+          npx wait-on http://localhost:5050/record --timeout 30000 || (cat /tmp/server.log && exit 1)
 
       - name: Install Cypress and run tests
         uses: cypress-io/github-action@v6

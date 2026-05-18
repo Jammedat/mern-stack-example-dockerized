@@ -39,7 +39,7 @@ Companion code for the [MERN Stack Tutorial](https://www.mongodb.com/languages/m
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+ (required for `node --env-file` support)
 - A free [MongoDB Atlas](https://www.mongodb.com/atlas?utm_campaign=devrel&utm_medium=github&utm_content=mern.stack.example&utm_term=learning.fuel) cluster
 
 ### 1. Configure the server
