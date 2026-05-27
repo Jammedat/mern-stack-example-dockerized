@@ -32,7 +32,7 @@
     },
     "5173": {
       "label": "React Dev Server",
-      "onAutoForward": "notify"
+      "onAutoForward": "openPreview"
     },
     "27017": {
       "label": "MongoDB",
@@ -40,7 +40,8 @@
     }
   },
 
-  "postCreateCommand": "cd mern/server && npm ci && node seed.js && cd ../client && npm ci",
+  "postCreateCommand": "cd mern/server && npm ci && cd ../client && npm ci",
+  "postStartCommand": "bash .devcontainer/startup.sh",
 
   "remoteEnv": {
     "ATLAS_URI": "mongodb://admin:mongodb@mongodb:27017/employees"

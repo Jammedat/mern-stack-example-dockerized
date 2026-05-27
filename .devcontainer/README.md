@@ -8,7 +8,10 @@ This project is configured to work seamlessly in GitHub Codespaces or with VS Co
 2. The devcontainer will automatically:
    - Spin up a MongoDB instance (Atlas Local)
    - Install all dependencies
-   - Seed sample data
+   - Seed sample data each time the Codespace starts
+   - Start the Express API on port 5050
+   - Start the React app on port 5173
+   - Open the React app in the built-in Codespaces browser preview
 
 ## Using with VS Code Dev Containers
 
@@ -29,19 +32,20 @@ Once the devcontainer is running:
 
 ## Quick Start in Codespaces
 
-Once the devcontainer is fully loaded (wait for "Poststart" to complete):
+Once the devcontainer is fully loaded, the app should already be running.
+
+If you want to check logs:
 
 ```bash
-# Terminal 1: Start the Express server
-cd mern/server
-npm start
-
-# Terminal 2: Start the React dev server
-cd mern/client
-npm run dev
+tail -f /tmp/mern-server.log
+tail -f /tmp/mern-client.log
 ```
 
-Then open http://localhost:5173 in your browser.
+If you need to restart startup tasks manually:
+
+```bash
+bash .devcontainer/startup.sh
+```
 
 ## Database Credentials
 
@@ -71,8 +75,9 @@ The devcontainer includes these extensions:
 
 ### MongoDB connection issues
 ```bash
-# Check if MongoDB is running
-mongosh -u admin -p mongodb --eval "db.adminCommand('ping')"
+# Check if mongodb is running
+cd mern/server
+node --input-type=module -e "import { MongoClient } from 'mongodb'; const c = new MongoClient(process.env.ATLAS_URI || 'mongodb://admin:mongodb@mongodb:27017/employees'); await c.connect(); console.log(await c.db('admin').command({ ping: 1 })); await c.close();"
 ```
 
 ### Port conflicts
