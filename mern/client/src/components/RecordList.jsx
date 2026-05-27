@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+function displayLevel(level) {
+  if (!level) return "";
+  const normalized = level.toString().trim().toLowerCase();
+  if (normalized === "intern") return "Intern";
+  if (normalized === "junior") return "Junior";
+  if (normalized === "senior") return "Senior";
+  return level;
+}
+
 const Record = (props) => (
   <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
     <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
@@ -10,7 +19,7 @@ const Record = (props) => (
       {props.record.position}
     </td>
     <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
-      {props.record.level}
+      {displayLevel(props.record.level)}
     </td>
     <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
       <div className="flex gap-2">

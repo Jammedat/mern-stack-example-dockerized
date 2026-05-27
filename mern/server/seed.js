@@ -31,16 +31,16 @@ const client = new MongoClient(URI, {
 });
 
 const records = [
-  { name: "Alice Johnson",  position: "Software Engineer",       level: "senior" },
-  { name: "Bob Martinez",   position: "Product Manager",         level: "intern" },
-  { name: "Carol Lee",      position: "UX Designer",             level: "junior" },
-  { name: "David Kim",      position: "DevOps Engineer",         level: "intern" },
-  { name: "Eva Nguyen",     position: "Data Scientist",          level: "senior" },
-  { name: "Frank Chen",     position: "Frontend Developer",      level: "junior" },
-  { name: "Grace Patel",    position: "Backend Developer",       level: "intern" },
-  { name: "Henry Okafor",   position: "QA Engineer",             level: "junior" },
-  { name: "Iris Müller",    position: "Engineering Manager",     level: "senior" },
-  { name: "James Tanaka",   position: "Security Engineer",       level: "intern" },
+  { name: "Alice Johnson",  position: "Software Engineer",       level: "Senior" },
+  { name: "Bob Martinez",   position: "Product Manager",         level: "Intern" },
+  { name: "Carol Lee",      position: "UX Designer",             level: "Junior" },
+  { name: "David Kim",      position: "DevOps Engineer",         level: "Intern" },
+  { name: "Eva Nguyen",     position: "Data Scientist",          level: "Senior" },
+  { name: "Frank Chen",     position: "Frontend Developer",      level: "Junior" },
+  { name: "Grace Patel",    position: "Backend Developer",       level: "Intern" },
+  { name: "Henry Okafor",   position: "QA Engineer",             level: "Junior" },
+  { name: "Iris Müller",    position: "Engineering Manager",     level: "Senior" },
+  { name: "James Tanaka",   position: "Security Engineer",       level: "Intern" },
 ];
 
 try {

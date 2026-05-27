@@ -11,6 +11,15 @@ export default function Record() {
   const params = useParams();
   const navigate = useNavigate();
 
+  function normalizeLevel(level) {
+    if (!level) return "";
+    const normalized = level.toString().trim().toLowerCase();
+    if (normalized === "intern") return "Intern";
+    if (normalized === "junior") return "Junior";
+    if (normalized === "senior") return "Senior";
+    return level;
+  }
+
   useEffect(() => {
     async function fetchData() {
       const id = params.id?.toString() || undefined;
@@ -30,7 +39,7 @@ export default function Record() {
         navigate("/");
         return;
       }
-      setForm(record);
+      setForm({ ...record, level: normalizeLevel(record.level) });
     }
     fetchData();
     return;
