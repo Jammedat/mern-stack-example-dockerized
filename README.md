@@ -7,7 +7,6 @@ Companion code for the [MERN Stack Tutorial](https://www.mongodb.com/languages/m
 [![CI](https://github.com/mongodb-developer/mern-stack-example/actions/workflows/main.yaml/badge.svg)](https://github.com/mongodb-developer/mern-stack-example/actions/workflows/main.yaml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mongodb-developer/mern-stack-example?style=social)](https://github.com/mongodb-developer/mern-stack-example/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/mongodb-developer/mern-stack-example)](https://github.com/mongodb-developer/mern-stack-example/issues)
 
 ## Project Overview
 

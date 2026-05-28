@@ -1,26 +1,14 @@
 {
-  "name": "MERN Stack with MongoDB",
+  "name": "MERN Stack Example",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "22"
-    }
-  },
 
   "customizations": {
     "vscode": {
       "extensions": [
-        "mongodb.mongodb-vscode",
-        "ms-vscode.vscode-typescript-next",
-        "esbenp.prettier-vscode"
-      ],
-      "settings": {
-        "mongodb.connectionSslEnabled": false,
-        "mongodb.defaultAuthenticationDatabase": "admin"
-      }
+        "mongodb.mongodb-vscode"
+      ]
     }
   },
 
@@ -43,7 +31,14 @@
   "postCreateCommand": "cd mern/server && npm ci && cd ../client && npm ci",
   "postStartCommand": "bash .devcontainer/startup.sh",
 
+  // this will open 3 bash sessions, each one running the specified command
+  "postAttachCommand": {
+    "server": "cd mern/server && npm start",
+    "client": "cd mern/client && npm run dev -- --host 0.0.0.0",
+    "portSetup": "sleep 5 && .devcontainer/portSetup.sh"
+  },
+
   "remoteEnv": {
-    "ATLAS_URI": "mongodb://admin:mongodb@mongodb:27017/employees"
+    "ATLAS_URI": "mongodb://localhost:27017/"
   }
 }

@@ -19,7 +19,7 @@ jobs:
       mongodb:
         image: mongo:latest
         options: >-
-          --health-cmd mongosh
+          --health-cmd "mongosh --username admin --password mongodb --authenticationDatabase admin --eval \"db.adminCommand('ping')\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -51,7 +51,7 @@ jobs:
 
       - name: Start server in the background
         env:
-          ATLAS_URI: mongodb://admin:mongodb@localhost:27017/
+          ATLAS_URI: mongodb://admin:mongodb@localhost:27017/employees?authSource=admin
         run: |
           echo "ATLAS_URI=$ATLAS_URI" > config.env
           npm start > /tmp/server.log 2>&1 &

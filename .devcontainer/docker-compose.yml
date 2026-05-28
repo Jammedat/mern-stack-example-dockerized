@@ -1,34 +1,26 @@
-version: '3.8'
-
 services:
   app:
     image: mcr.microsoft.com/devcontainers/javascript-node:22-bookworm
     volumes:
       - ../..:/workspaces:cached
+ 
+    # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     network_mode: service:mongodb
-    environment:
-      - ATLAS_URI=mongodb://admin:mongodb@mongodb:27017/employees
-      - PORT=5050
+
+    depends_on:
+      - mongodb
 
   mongodb:
-    image: mongodb/mongodb-atlas-local:latest
+    image: mongodb/mongodb-atlas-local:8.0.3-20250506T093411Z
     restart: unless-stopped
-    ports:
-      - 27017:27017
-    environment:
-      MONGODB_INITDB_ROOT_USERNAME: admin
-      MONGODB_INITDB_ROOT_PASSWORD: mongodb
-      MONGO_INITDB_DATABASE: employees
     volumes:
       - mongodb-data:/data/db
-      - mongodb-config:/data/configdb
-    healthcheck:
-      test: mongosh --eval "db.adminCommand('ping')"
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
+      - ../..:/workspaces:cached
+    ports:
+      - 27017:27017
+    
 volumes:
   mongodb-data:
-  mongodb-config:
