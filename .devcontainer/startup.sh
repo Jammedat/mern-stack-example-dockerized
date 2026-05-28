@@ -18,45 +18,28 @@ EOF
 }
 
 wait_for_mongodb() {
-  local max_tries=30
+  local max_tries=60
   local try=1
 
-  until node --input-type=module -e "import { MongoClient } from 'mongodb'; const c = new MongoClient(process.env.ATLAS_URI); await c.connect(); await c.db('admin').command({ ping: 1 }); await c.close();" >/dev/null 2>&1; do
+  # Atlas Local uses a replica set — wait until a writable primary is elected,
+  # not just until mongod responds to ping (which happens before primary election).
+  until node --input-type=module -e "
+    import { MongoClient } from 'mongodb';
+    const c = new MongoClient(process.env.ATLAS_URI);
+    await c.connect();
+    const h = await c.db('admin').command({ hello: 1 });
+    await c.close();
+    if (!h.isWritablePrimary) throw new Error('no primary yet');
+  " >/dev/null 2>&1; do
     if (( try >= max_tries )); then
-      echo "MongoDB did not become ready in time."
+      echo "MongoDB primary did not become ready in time."
       return 1
     fi
-    echo "Waiting for MongoDB... ($try/$max_tries)"
+    echo "Waiting for MongoDB primary... ($try/$max_tries)"
     try=$((try + 1))
     sleep 2
   done
-}
-
-seed_database() {
-  (
-    cd "$SERVER_DIR"
-    node --env-file=config.env seed.js > /tmp/mern-seed.log 2>&1
-  )
-
-  echo "Seed completed (log: /tmp/mern-seed.log)."
-}
-
-verify_seed_data() {
-  local count
-
-  count=$(
-    cd "$SERVER_DIR" &&
-      node --env-file=config.env --input-type=module -e "import { MongoClient } from 'mongodb'; const c = new MongoClient(process.env.ATLAS_URI); await c.connect(); const n = await c.db('employees').collection('records').countDocuments(); console.log(n); await c.close();"
-  )
-
-  echo "Seed verification: employees.records has $count documents."
-
-  if [[ "$count" -le 0 ]]; then
-    echo "Seed verification failed: no documents found in employees.records."
-    echo "Seed log tail:"
-    tail -n 50 /tmp/mern-seed.log || true
-    return 1
-  fi
+  echo "MongoDB primary is ready."
 }
 
 start_server_if_needed() {
@@ -87,9 +70,5 @@ start_client_if_needed() {
 
 ensure_config
 wait_for_mongodb
-seed_database
-verify_seed_data
-start_server_if_needed
-start_client_if_needed
 
 echo "Codespaces startup complete."
