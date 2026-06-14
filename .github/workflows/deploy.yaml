@@ -38,7 +38,7 @@ jobs:
         docker push $ECR_REGISTRY/mern-backend:latest
     
     - name: setup terraform
-      uses: hashicorp/terraform@v3
+      uses: hashicorp/setup-terraform@v3
     
     - name: terraform init and apply
       env:
