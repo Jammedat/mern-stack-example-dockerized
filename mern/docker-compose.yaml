@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  database:
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+
+  backend:
+    build: ./server
+    ports:
+      - "5050:5050"
+    environment:
+      - PORT=5050
+      - ATLAS_URI=mongodb://database:27017/my_mern_db
+    depends_on:
+      - database
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  frontend:
+    build: ./client
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+volumes:
+  mongo_data: 

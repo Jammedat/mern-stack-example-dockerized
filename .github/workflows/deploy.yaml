@@ -1,0 +1,51 @@
+name: Production Cloud Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+
+    - name: login to amazon ecr
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag and push frontend to ecr
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/mern-frontend:latest ./mern/client
+        docker push $ECR_REGISTRY/mern-frontend:latest
+
+    - name: Build, tag and push backend to ecr
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build -t $ECR_REGISTRY/mern-backend:latest ./mern/server
+        docker push $ECR_REGISTRY/mern-backend:latest
+    
+    - name: setup terraform
+      uses: hashicorp/terraform@v3
+    
+    - name: terraform init and apply
+      env:
+        TF_VAR_mongo_atlas_uri: ${{ secrets.MONGODB_ATLAS_URI }}
+      run: |
+        cd terraform
+        terraform init
+        terraform plan
+        terraform apply --auto-approve
+
